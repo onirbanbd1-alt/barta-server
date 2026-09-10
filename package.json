@@ -1,0 +1,11 @@
+{
+  "name": "barta-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "grammy": "^1.46.0",
+    "node-telegram-bot-api": "^2.1.0"
+  }
+}
