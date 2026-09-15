@@ -7,12 +7,12 @@ app.use(express.json());
 // Render.com অটোমেটিক পোর্ট অ্যাসাইন করে, লোকালের জন্য ৩০০০ পোর্ট রাখা হলো
 const PORT = process.env.PORT || 3000;
 
-// ১. Nodemailer ট্রান্সপোর্টার কনফিগারেশন (আপনার জিমেইল এবং অ্যাপ পাসওয়ার্ড এখানে থাকবে)
+// ১. Nodemailer ট্রান্সপোর্টার কনফিগারেশন (রেন্ডারের Environment Variables থেকে মানগুলো নেবে)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'bartaotp@gmail.com',         // আপনার জিমেইল
-        pass: 'YOUR_16_DIGIT_APP_PASSWORD' // জিমেইলের App Password এখানে বসাবেন
+        user: process.env.GMAIL_USER,         // রেন্ডারের GMAIL_USER ভেরিয়েবল থেকে ইমেইল নেবে
+        pass: process.env.GMAIL_APP_PASSWORD  // রেন্ডারের GMAIL_APP_PASSWORD ভেরিয়েবল থেকে পাসওয়ার্ড নেবে
     }
 });
 
@@ -29,7 +29,7 @@ app.post('/api/send-otp', async (req, res) => {
         return res.status(400).json({ success: false, error: 'Email and OTP code are required' });
     }
 
-    // আপনার কাঙ্ক্ষিত এইচটিএমপি ইমেইল টেমপ্লেট (ছবির ডিজাইন অনুযায়ী)
+    // আপনার কাঙ্ক্ষিত এইচটিএমপি ইমেইল টেমপ্লেট (ছবির ডিজাইন অনুযায়ী)
     const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -76,7 +76,7 @@ app.post('/api/send-otp', async (req, res) => {
     `;
 
     const mailOptions = {
-        from: '"Barta Messenger" <bartaotp@gmail.com>',
+        from: `"Barta Messenger" <${process.env.GMAIL_USER}>`,
         to: email,
         subject: `🔒 Your Barta verification code is ${otpCode}`,
         html: htmlContent
